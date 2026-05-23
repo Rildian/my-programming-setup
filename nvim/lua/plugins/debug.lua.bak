@@ -1,0 +1,131 @@
+return {
+  "mfussenegger/nvim-dap",
+  dependencies = {
+    "rcarriga/nvim-dap-ui",
+    "nvim-neotest/nvim-nio",
+    "mfussenegger/nvim-dap-python",
+  },
+  keys = {
+    {
+      "<F5>",
+      function()
+        require("dap").continue()
+      end,
+      desc = "Debug: Start/Continue",
+    },
+    {
+      "<F10>",
+      function()
+        require("dap").step_over()
+      end,
+      desc = "Debug: Step Over",
+    },
+    {
+      "<F11>",
+      function()
+        require("dap").step_into()
+      end,
+      desc = "Debug: Step Into",
+    },
+    {
+      "<S-F11>",
+      function()
+        require("dap").step_out()
+      end,
+      desc = "Debug: Step Out",
+    },
+    {
+      "<S-F5>",
+      function()
+        require("dap").terminate()
+      end,
+      desc = "Debug: Stop",
+    },
+    {
+      "<Leader>db",
+      function()
+        require("dap").toggle_breakpoint()
+      end,
+      desc = "Debug: Toggle Breakpoint",
+    },
+  },
+  config = function()
+    local dap = require("dap")
+    local dapui = require("dapui")
+    local dap_python = require("dap-python")
+
+    dapui.setup()
+
+    -- === Python Configuration ===
+    local venv_python = vim.fn.getcwd() .. "/.venv/bin/python"
+    if vim.fn.executable(venv_python) == 1 then
+      dap_python.setup(venv_python)
+    else
+      dap_python.setup("python3")
+    end
+
+    -- === C++ (codelldb) Configuration ===
+    -- Bypass the Mason wrapper script and point directly to the actual extension binary
+    local mason_path = vim.fn.stdpath("data") .. "/mason/"
+    local codelldb_path = mason_path .. "packages/codelldb/extension/adapter/codelldb"
+
+    dap.adapters.codelldb = {
+      type = "server",
+      host = "127.0.0.1",
+      port = "${port}",
+      executable = {
+        command = codelldb_path,
+        args = { "--port", "${port}" },
+      },
+    }
+
+    -- 2. Tell DAP what to do when you press <F5> in a C++ file
+    dap.configurations.cpp = {
+      {
+        name = "Launch file",
+        type = "codelldb",
+        request = "launch",
+        program = function()
+          return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+        end,
+        cwd = "${workspaceFolder}",
+        stopOnEntry = false,
+      },
+    }
+    -- Mirror the C++ config for C files as well
+    dap.configurations.c = dap.configurations.cpp
+
+    -- === UI Listeners (Wrapped to prevent E565) ===
+    dap.listeners.before.attach.dapui_config = function()
+      vim.schedule(function()
+        dapui.open()
+      end)
+    end
+    dap.listeners.before.launch.dapui_config = function()
+      vim.schedule(function()
+        dapui.open()
+      end)
+    end
+    dap.listeners.before.event_terminated.dapui_config = function()
+      vim.schedule(function()
+        dapui.close()
+      end)
+    end
+    dap.listeners.before.event_exited.dapui_config = function()
+      vim.schedule(function()
+        dapui.close()
+      end)
+    end
+
+    -- === Local Project Config Override ===
+    local project_config = vim.fn.getcwd() .. "/.nvim.lua"
+    if vim.fn.filereadable(project_config) == 1 then
+      local success, err = pcall(dofile, project_config)
+      if success then
+        vim.notify("Config has loaded!", vim.log.levels.INFO)
+      else
+        vim.notify("Error at .nvim.lua: " .. err, vim.log.levels.ERROR)
+      end
+    end
+  end,
+}
