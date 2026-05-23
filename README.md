@@ -1,4 +1,4 @@
-# My Setup Tutorial
+# My Programming Setup Tutorial
 
 This tutorial is aimed to make it work through all my devices (such as my laptop or fresh re-install). My stack includes **nvim**, **tmux** and **alacritty**.
 
@@ -26,7 +26,7 @@ In Pop_OS's Desktop Appearance:
 * Set **System Font** as 'JetBrainsMono Nerd Font'
 * Set **Monospace** font as 'JetBrainsMono Nerd Font Mono'
 
-1. **Install Wayland Clipboard Tool**:
+2. **Install Wayland Clipboard Tool**:
 
 ```bash
 sudo apt update && sudo apt install wl-clipboard
@@ -36,7 +36,7 @@ sudo apt update && sudo apt install wl-clipboard
 mv <where this file was downloaded> ~/.config/
 ```
 
-1. **Install node and npm** (unfortunately) by using nvm
+3. **Install node and npm** (unfortunately) by using nvm
 
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash # node version manager
@@ -65,7 +65,7 @@ Then, move this to your config file:
 cp -r <this repo>/alacritty/ ~/.config/ 
 ```
 
-1. **Install Tmux**:
+2. **Install Tmux**:
 
 ```bash
 sudo apt install tmux
@@ -75,7 +75,7 @@ sudo apt install tmux
 cp -r <this repo>/tmux/ ~/.config/ 
 ```
 
-1. **Install Neovim** and then **LazyVim**
+3. **Install Neovim** and then **LazyVim**
 
 **Nvim**:
 
