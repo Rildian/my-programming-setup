@@ -9,6 +9,8 @@ return {
     vim.cmd([[hi NvimTreeNormal guibg=NONE ctermbg=NONE]])
 
     require("nvim-tree").setup({
+      disable_netrw = true,
+      hijack_netrw = true,
       filters = {
         dotfiles = false,
         git_ignored = false,

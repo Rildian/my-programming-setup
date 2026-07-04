@@ -1,2 +1,2 @@
 vim.g.mapleader = " "
-vim.g.maplocaleader = " "
+vim.g.maplocalleader = " "

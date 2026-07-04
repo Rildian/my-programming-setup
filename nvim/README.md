@@ -22,6 +22,49 @@ It also provides some useful scripts and recommendations in order to make everyt
 
 ---
 
+## Go Setup
+
+The Go setup is enabled through the LazyVim extra:
+
+```json
+"lazyvim.plugins.extras.lang.go"
+```
+
+After cloning this repo and running `:Lazy sync`, LazyVim should load the Go plugin
+specs. After opening Neovim, check `:Mason` to confirm the external Go tools were
+installed.
+
+### LazyVim Go plugins/config
+
+These are provided by the Go extra itself:
+
+| Item | Purpose |
+|---|---|
+| `nvim-treesitter` parsers: `go`, `gomod`, `gowork`, `gosum` | Syntax parsing and highlighting |
+| `nvim-lspconfig` with `gopls` | Go language server configuration |
+| `nvim-dap-go` | Go integration for Neovim DAP/debugging |
+| `neotest-golang` | Go test integration |
+| `mini.icons` Go icons | Filetype/icon metadata |
+
+### Mason Go tools
+
+These are external tools that Mason should install for Go support:
+
+| Tool | Purpose |
+|---|---|
+| `gopls` | Go language server |
+| `goimports` | Import-aware formatter |
+| `gofumpt` | Stricter Go formatter |
+| `gomodifytags` | Struct tag editing helper |
+| `impl` | Interface implementation helper |
+| `golangci-lint` | Go lint runner |
+| `delve` / `dlv` | Go debugger used by DAP |
+
+If something is missing after a fresh clone, open `:Mason` and install the missing
+tool from the table above.
+
+---
+
 ## C++ Setup
 
 ### 1. Installation
